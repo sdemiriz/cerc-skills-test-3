@@ -29,7 +29,23 @@ process downloadInputs {
     """
 }
 
+process downloadVerifyBamIdResource {
+  debug true
+  input:
+    val verify_bam_id_url
+
+  output:
+    path '1000g.phase3.100k.b38.vcf.gz.dat*'
+
+  script:
+    """
+    git clone $verify_bam_id_url verify_bam_id
+    mv verify_bam_id/resource/1000g.phase3.100k.b38.vcf.gz.dat* .
+    """
+}
+
 workflow {
   downloadGenomeAndIndex(params.human_genome_url, params.human_genome_index_url)
   downloadInputs(params.skills_test_url)
+  downloadVerifyBamIdResource(params.verify_bam_id_url)
 }
