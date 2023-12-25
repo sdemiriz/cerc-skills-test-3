@@ -1,4 +1,9 @@
 name: cerc
 channels:
   - defaults
+dependencies:
+  - nextflow=23.10.0
+  - python
+  - ca-certificates
+  - openssl
 prefix: /home/sdemiriz/.conda/envs/cerc
