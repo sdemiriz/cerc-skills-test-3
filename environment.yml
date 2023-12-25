@@ -1,0 +1,4 @@
+name: cerc
+channels:
+  - defaults
+prefix: /home/sdemiriz/.conda/envs/cerc
