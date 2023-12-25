@@ -14,6 +14,22 @@ process downloadGenomeAndIndex {
     """
 }
 
+process downloadInputs {
+  debug true
+  input:
+    val skills_test_url
+
+  output:
+    path 'input/'
+
+  script:
+    """
+    git clone $skills_test_url skills_test_3
+    mv skills_test_3/input .
+    """
+}
+
 workflow {
   downloadGenomeAndIndex(params.human_genome_url, params.human_genome_index_url)
+  downloadInputs(params.skills_test_url)
 }
