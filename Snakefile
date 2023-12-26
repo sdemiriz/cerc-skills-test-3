@@ -63,8 +63,8 @@ rule verify_bam_id:
     samples_downloaded_flag = "results/samples_downloaded_flag",
      
   output:
-    "results/{sample_number}.Ancestry",
-    "results/{sample_number}.selfSM",
+    "results/verifybamid/{sample_number}.Ancestry",
+    "results/verifybamid/{sample_number}.selfSM",
 
   params:
     svd_prefix = "inputs/VerifyBamID_resource/1000g.phase3.100k.b38.vcf.gz.dat",
@@ -77,5 +77,5 @@ rule verify_bam_id:
       --Reference {input.reference} \
       --BamFile {input.bam_file} \
       --NumPC {params.num_pc} \
-      --Output results/{wildcards.sample_number}
+      --Output results/verifybamid/{wildcards.sample_number}
     """
