@@ -77,5 +77,5 @@ rule verify_bam_id:
       --Reference {input.reference} \
       --BamFile {input.bam_file} \
       --NumPC {params.num_pc} \
-      --Output HGDP{wildcards.sample_number}
+      --Output results/HGDP{wildcards.sample_number}
     """
