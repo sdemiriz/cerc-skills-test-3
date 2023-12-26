@@ -1,5 +1,9 @@
 configfile: "config/config.yaml"
 
+rule all:
+  input: 
+    "results/HGDP00082.Ancestry"
+
 rule download_human_genome_and_index:
   """
   Download GRCh38 reference genome and the corresponding index
