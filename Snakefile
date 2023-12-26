@@ -23,6 +23,11 @@ rule download_human_genome_and_index:
     """
 
 rule download_verifybamid_resources:
+  """
+  The verifybamid2 tool does provide the necessary reference panel when installed, 
+  but a copy can also be downloaded fromthe tool's Github repository so we will do 
+  that for future reproducibility
+  """
   params:
     resources_url = config["verify_bam_id_url"],
 
@@ -37,6 +42,11 @@ rule download_verifybamid_resources:
     """
 
 rule download_crams:
+  """
+  Download the CRAM files and their corresponding index files from the skills_test_3 repository using a flag file
+  since the pipeline is not aware of what the files are named beforehand and downloading each pair individually
+  would be redundant
+  """
   params:
     inputs_url = config["skills_test_url"],
     temp_dir = "skills_test"
@@ -52,11 +62,15 @@ rule download_crams:
     touch results/samples_downloaded_flag
     """
 
+# Quick sanity check to list all downloaded file names
 import os
 sample_names = [file[:9] for file in os.listdir("inputs/crams/") if file.startswith("HGDP")]
 print(sample_names)
 
 rule verify_bam_id:
+  """
+  Run the verifybamid2 tool on the downloaded files using wildcards to extend its functionality
+  """
   input:
     reference = "inputs/GRCh38.fa",
     bam_file = "inputs/crams/{sample_number}.GRCh38.low_coverage.cram",
