@@ -94,3 +94,15 @@ rule verify_bam_id:
       --NumPC {params.num_pc} \
       --Output results/verifybamid/{wildcards.sample_number}
     """
+
+rule collect_contamination:
+  """
+  """
+  input:
+    verifybamid_ran_flag = "results/flags/verifybamid_ran_flag",
+  output:
+    all_samples_contamination = "results/verifybamid/all.selfSM",
+  shell:
+  """
+  cat results/verifybamid/*.selfSM | sed -e '1p' -e '/#SEQ_ID/d' > {output.all_samples_contamination}
+  """
