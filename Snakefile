@@ -53,18 +53,18 @@ rule download_crams:
     """
 
 import os
-sample_names = [file[4:9] for file in os.listdir("inputs/crams/") if file.startswith("HGDP")]
+sample_names = [file[:9] for file in os.listdir("inputs/crams/") if file.startswith("HGDP")]
 print(sample_names)
 
 rule verify_bam_id:
   input:
     reference = "inputs/GRCh38.fa",
-    bam_file = "inputs/crams/HGDP{sample_number}.GRCh38.low_coverage.cram",
+    bam_file = "inputs/crams/{sample_number}.GRCh38.low_coverage.cram",
     samples_downloaded_flag = "results/samples_downloaded_flag",
      
   output:
-    "results/HGDP{sample_number}.Ancestry",
-    "results/HGDP{sample_number}.selfSM",
+    "results/{sample_number}.Ancestry",
+    "results/{sample_number}.selfSM",
 
   params:
     svd_prefix = "inputs/VerifyBamID_resource/1000g.phase3.100k.b38.vcf.gz.dat",
@@ -77,5 +77,5 @@ rule verify_bam_id:
       --Reference {input.reference} \
       --BamFile {input.bam_file} \
       --NumPC {params.num_pc} \
-      --Output results/HGDP{wildcards.sample_number}
+      --Output results/{wildcards.sample_number}
     """
