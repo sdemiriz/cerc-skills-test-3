@@ -1,4 +1,4 @@
 human_genome_url: "ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa"
 human_genome_index_url: "ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa.fai"
-skills_test_url: "https://github.com/CERC-Genomic-Medicine/skills_test_3.git"
 verify_bam_id_url: "https://github.com/Griffan/VerifyBamID.git"
+skills_test_url: "https://github.com/CERC-Genomic-Medicine/skills_test_3.git"
