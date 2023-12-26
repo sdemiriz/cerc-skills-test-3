@@ -31,3 +31,18 @@ rule download_verifybamid_resources:
     mv VerifyBamID/resource/1000g.phase3.100k.b38.vcf.gz.dat* inputs/VerifyBamID_resource/
     rm -rf VerifyBamID
     """
+
+rule download_skills_test_3_inputs:
+  params:
+    inputs_url = config["skills_test_url"],
+
+  output:
+    "inputs/skills_test_3_inputs/HGDP{sample_number}.GRCh38.low_coverage.cram",
+    "inputs/skills_test_3_inputs/HGDP{sample_number}.GRCh38.low_coverage.cram.crai",
+
+  shell:
+    """
+    git clone https://github.com/CERC-Genomic-Medicine/skills_test_3.git
+    mv skills_test_3/input/* inputs/skills_test_3_inputs/
+    rm -rf skills_test_3
+    """
