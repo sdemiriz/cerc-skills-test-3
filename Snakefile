@@ -47,3 +47,7 @@ rule download_crams:
     rm -rf skills_test
     touch results/samples_downloaded_flag
     """
+
+import os
+sample_names = [file[4:9] for file in os.listdir("inputs/crams/") if file.startswith("HGDP")]
+print(sample_names)
