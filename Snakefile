@@ -100,9 +100,14 @@ rule collect_contamination:
   """
   input:
     verifybamid_ran_flag = "results/flags/verifybamid_ran_flag",
+
   output:
     all_samples_contamination = "results/verifybamid/all.selfSM",
+
+  params:
+    all_samples = "results/verifybamid/*.selfSM",
+
   shell:
   """
-  cat results/verifybamid/*.selfSM | sed -e '1p' -e '/#SEQ_ID/d' > {output.all_samples_contamination}
+  cat {params.all_samples} | sed -e '1p' -e '/#SEQ_ID/d' > {output.all_samples_contamination}
   """
