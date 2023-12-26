@@ -32,7 +32,7 @@ rule download_verifybamid_resources:
     resources_url = config["verify_bam_id_url"],
 
   output:
-    verify_bam_id_resources = expand("inputs/VerifyBamID_resource/1000g.phase3.100k.b38.vcf.gz.dat.{ext}", ext=["UD", "V", "bed", "mu"])
+    verify_bam_id_resources = expand("inputs/VerifyBamID_resource/1000g.phase3.100k.b38.vcf.gz.dat.{ext}", ext=["UD", "V", "bed", "mu"]),
   
   shell:
     """
@@ -49,17 +49,17 @@ rule download_crams:
   """
   params:
     inputs_url = config["skills_test_url"],
-    temp_dir = "skills_test"
+    temp_dir = "skills_test",
 
   output:
-    "results/samples_downloaded_flag"
+    samples_downloaded_flag = "results/flags/samples_downloaded_flag",
 
   shell:
     """
     git clone {params.inputs_url} {params.temp_dir}
     mv {params.temp_dir}/input/* inputs/crams/
     rm -rf skills_test
-    touch results/samples_downloaded_flag
+    touch {output.samples_downloaded_flag}
     """
 
 # Quick sanity check to list all downloaded file names
@@ -74,11 +74,12 @@ rule verify_bam_id:
   input:
     reference = "inputs/GRCh38.fa",
     bam_file = "inputs/crams/{sample_number}.GRCh38.low_coverage.cram",
-    samples_downloaded_flag = "results/samples_downloaded_flag",
+    samples_downloaded_flag = "results/flags/samples_downloaded_flag",
      
   output:
     "results/verifybamid/{sample_number}.Ancestry",
     "results/verifybamid/{sample_number}.selfSM",
+    "results/flags/verifybamid_ran_flag"
 
   params:
     svd_prefix = "inputs/VerifyBamID_resource/1000g.phase3.100k.b38.vcf.gz.dat",
