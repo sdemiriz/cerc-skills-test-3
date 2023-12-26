@@ -27,22 +27,22 @@ rule download_verifybamid_resources:
   
   shell:
     """
-    git clone https://github.com/Griffan/VerifyBamID.git
+    git clone {params.resources_url}
     mv VerifyBamID/resource/1000g.phase3.100k.b38.vcf.gz.dat* inputs/VerifyBamID_resource/
     rm -rf VerifyBamID
     """
 
-rule download_skills_test_3_inputs:
+rule download_crams:
   params:
     inputs_url = config["skills_test_url"],
+    temp_dir = "skills_test"
 
   output:
-    "inputs/skills_test_3_inputs/HGDP{sample_number}.GRCh38.low_coverage.cram",
-    "inputs/skills_test_3_inputs/HGDP{sample_number}.GRCh38.low_coverage.cram.crai",
+    "inputs/crams/1000G_reference_populations.txt",
 
   shell:
     """
-    git clone https://github.com/CERC-Genomic-Medicine/skills_test_3.git
-    mv skills_test_3/input/* inputs/skills_test_3_inputs/
-    rm -rf skills_test_3
+    git clone {params.inputs_url} {params.temp_dir}
+    mv {params.temp_dir}/input/* inputs/crams/
+    rm -rf skills_test
     """
