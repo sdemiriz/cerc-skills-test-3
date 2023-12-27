@@ -26,9 +26,9 @@ def two_axis_pc_plot(first: str, second: str, out_file: str):
     plt.savefig(out_file)
 
 
-two_axis_pc_plot("PC1", "PC2", snakemake.output["pc_1_2_plot"])
-two_axis_pc_plot("PC2", "PC3", snakemake.output["pc_2_3_plot"])
-two_axis_pc_plot("PC3", "PC4", snakemake.output["pc_3_4_plot"])
+two_axis_pc_plot("PC1", "PC2", snakemake.output["pc12_plot"])
+two_axis_pc_plot("PC2", "PC3", snakemake.output["pc23_plot"])
+two_axis_pc_plot("PC3", "PC4", snakemake.output["pc34_plot"])
 
 fig = plt.figure()
 ax = fig.add_subplot(projection="3d")
@@ -41,4 +41,4 @@ ax.scatter(
 ax.set_xlabel("PC1")
 ax.set_ylabel("PC2")
 ax.set_zlabel("PC3")
-plt.savefig(snakemake.output["pc_1_2_3_plot"])
+plt.savefig(snakemake.output["pc123_plot"])

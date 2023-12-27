@@ -130,10 +130,10 @@ rule generate_pc_plots:
     samples_populations = "inputs/crams/1000G_reference_populations.txt",
 
   output:
-    pc_1_2_plot = "results/PC1_PC2.png",
-    pc_2_3_plot = "results/PC2_PC3.png",
-    pc_3_4_plot = "results/PC3_PC4.png",
-    pc_1_2_3_plot = "results/PC1_PC2_PC3.png",
+    pc12_plot = "results/PC1_PC2.png",
+    pc23_plot = "results/PC2_PC3.png",
+    pc34_plot = "results/PC3_PC4.png",
+    pc123_plot = "results/PC1_PC2_PC3.png",
 
   script:
     "scripts/generate_pc_plots.py"
