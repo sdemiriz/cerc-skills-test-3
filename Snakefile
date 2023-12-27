@@ -133,7 +133,7 @@ rule generate_pc_plots:
     pc_1_2_plot = "results/PC1_PC2.png",
     pc_2_3_plot = "results/PC2_PC3.png",
     pc_3_4_plot = "results/PC3_PC4.png",
-    #pc_1_2_3_plot = "results/PC1_PC2_PC3.png",
+    pc_1_2_3_plot = "results/PC1_PC2_PC3.png",
 
   script:
     "scripts/generate_pc_plots.py"
