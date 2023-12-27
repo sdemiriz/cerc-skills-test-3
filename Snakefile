@@ -120,3 +120,19 @@ rule collect_contamination:
     sed -e 's/#SEQ_ID/SAMPLE/' > \
     {output.all_samples_contamination}
     """
+
+rule generate_pc_plots:
+  """
+
+  """
+  input:
+    reference_pc = "inputs/VerifyBamID_resource/1000g.phase3.100k.b38.vcf.gz.dat.V",
+
+  output:
+    pc_1_2_plot = "results/pc_1_2_plot.png",
+    pc_2_3_plot = "results/pc_2_3_plot.png",
+    pc_3_4_plot = "results/pc_3_4_plot.png",
+    pc_1_2_3_plot = "results/pc_1_2_3_plot.png",
+
+  script:
+    "scripts/generate_pc_plots.py"
