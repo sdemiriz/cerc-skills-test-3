@@ -97,6 +97,11 @@ rule verify_bam_id:
 
 rule collect_contamination:
   """
+  Concatanate all .selfSM files into one, leaving only the two required columns:
+  1. Concatanate all sample contamination samples into one
+  2. Remove all but the first header in the concatanated file
+  3. Select the two desired columns
+  4. Rename #SEQ_ID field to SAMPLE
   """
   input:
     verifybamid_ran_flag = "results/flags/verifybamid_ran_flag",
@@ -108,6 +113,10 @@ rule collect_contamination:
     all_samples = "results/verifybamid/*.selfSM",
 
   shell:
-  """
-  cat {params.all_samples} | sed -e '1p' -e '/#SEQ_ID/d' > {output.all_samples_contamination}
-  """
+    """
+    cat {params.all_samples} | \
+    sed -e '1p' -e '/#SEQ_ID/d' | \
+    cut -f 1,7 | \
+    sed -e 's/#SEQ_ID/SAMPLE/' > \
+    {output.all_samples_contamination}
+    """
