@@ -77,9 +77,9 @@ rule verify_bam_id:
     samples_downloaded_flag = "results/flags/samples_downloaded_flag",
      
   output:
-    "results/verifybamid/{sample_number}.Ancestry",
-    "results/verifybamid/{sample_number}.selfSM",
-    "results/flags/verifybamid_ran_flag"
+    #"results/verifybamid/{sample_number}.Ancestry",
+    #"results/verifybamid/{sample_number}.selfSM",
+    "results/flags/verifybamid_ran_flag",
 
   params:
     svd_prefix = "inputs/VerifyBamID_resource/1000g.phase3.100k.b38.vcf.gz.dat",
@@ -132,7 +132,7 @@ rule generate_pc_plots:
     pc_1_2_plot = "results/pc_1_2_plot.png",
     pc_2_3_plot = "results/pc_2_3_plot.png",
     pc_3_4_plot = "results/pc_3_4_plot.png",
-    pc_1_2_3_plot = "results/pc_1_2_3_plot.png",
+    #pc_1_2_3_plot = "results/pc_1_2_3_plot.png",
 
   script:
     "scripts/generate_pc_plots.py"
