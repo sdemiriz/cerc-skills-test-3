@@ -10,8 +10,8 @@ rule download_human_genome_and_index:
     human_genome_index_url = config["human_genome_index_url"],
     
   output:
-    genome = 'inputs/GRCh38.fa',
-    genome_index = 'inputs/GRCh38.fa.fai',
+    genome = 'inputs/genome/GRCh38.fa',
+    genome_index = 'inputs/genome/GRCh38.fa.fai',
 
   shell:
     """
@@ -26,16 +26,16 @@ rule download_verifybamid_resources:
   that for future reproducibility
   """
   params:
-    resources_url = config["verify_bam_id_url"],
+    resources_url = config["verifybamid2_url"],
 
   output:
-    verify_bam_id_resources = expand("inputs/VerifyBamID_resource/1000g.phase3.100k.b38.vcf.gz.dat.{ext}", ext=["UD", "V", "bed", "mu"]),
+    verify_bam_id_resources = expand("inputs/verifybamid_resources/1000g.phase3.100k.b38.vcf.gz.dat.{ext}", ext=["UD", "V", "bed", "mu"]),
   
   shell:
     """
     git clone {params.resources_url}
-    mv VerifyBamID/resource/1000g.phase3.100k.b38.vcf.gz.dat* inputs/VerifyBamID_resource/
-    rm -rf VerifyBamID
+    mv verifybamid/resources/1000g.phase3.100k.b38.vcf.gz.dat* inputs/verifybamid_resources/
+    rm -rf verifybamid
     """
 
 rule download_crams:
@@ -60,12 +60,7 @@ rule download_crams:
     rm -rf skills_test
     """
 
-# Quick sanity check to list all downloaded file names
-import os
-sample_names = [file[:9] for file in os.listdir("inputs/crams/") if file.startswith("HGDP")]
-print(sample_names)
-
-rule verify_bam_id:
+rule verifybamid:
   """
   Run the verifybamid2 tool on the downloaded files using wildcards to extend its functionality
   """
@@ -78,8 +73,9 @@ rule verify_bam_id:
     selfSM = expand("results/verifybamid/{sample_numbers}.selfSM", sample_numbers=sample_numbers),
 
   params:
-    svd_prefix = "inputs/VerifyBamID_resource/1000g.phase3.100k.b38.vcf.gz.dat",
+    svd_prefix = "inputs/verifybamid_resources/1000g.phase3.100k.b38.vcf.gz.dat",
     num_pc = 4,
+    output_prefix = lambda wildcards: "results/verifybamid/{wildcards.sample_numbers}",
 
   shell:
     """
@@ -88,7 +84,7 @@ rule verify_bam_id:
       --Reference {input.reference} \
       --BamFile {input.bam_file} \
       --NumPC {params.num_pc} \
-      --Output results/verifybamid/{wildcards.sample_number}
+      --Output {params.output_prefix}
     """
 
 rule collect_contamination:
