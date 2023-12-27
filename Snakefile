@@ -123,11 +123,10 @@ rule collect_contamination:
 
 rule generate_pc_plots:
   """
-
+  Generate the plots with the requested Principal Component matchups
   """
   input:
     reference_pc = "inputs/VerifyBamID_resource/1000g.phase3.100k.b38.vcf.gz.dat.V",
-    samples_populations = "inputs/crams/1000G_reference_populations.txt",
 
   output:
     pc_1_2_plot = "results/pc_1_2_plot.png",
