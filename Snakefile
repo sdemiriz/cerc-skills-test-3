@@ -1,8 +1,5 @@
 configfile: "config/config.yaml"
-
-rule all:
-  input: 
-    "results/HGDP00082.Ancestry"
+sample_numbers = config["sample_numbers"]
 
 rule download_human_genome_and_index:
   """
@@ -52,14 +49,15 @@ rule download_crams:
     temp_dir = "skills_test",
 
   output:
-    samples_downloaded_flag = "results/flags/samples_downloaded_flag",
+    cram_files = expand("inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram", sample_numbers=sample_numbers),
+    cram_index_files = expand("inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram.fai", sample_numbers=sample_numbers),
+    thousandG_reference_populations = "inputs/crams/1000G_reference_populations.txt",
 
   shell:
     """
     git clone {params.inputs_url} {params.temp_dir}
     mv {params.temp_dir}/input/* inputs/crams/
     rm -rf skills_test
-    touch {output.samples_downloaded_flag}
     """
 
 # Quick sanity check to list all downloaded file names
@@ -72,14 +70,12 @@ rule verify_bam_id:
   Run the verifybamid2 tool on the downloaded files using wildcards to extend its functionality
   """
   input:
-    reference = "inputs/GRCh38.fa",
-    bam_file = "inputs/crams/{sample_number}.GRCh38.low_coverage.cram",
-    samples_downloaded_flag = "results/flags/samples_downloaded_flag",
+    reference = "inputs/genome/GRCh38.fa",
+    bam_file = expand("inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram", sample_numbers=sample_numbers),
      
   output:
-    #"results/verifybamid/{sample_number}.Ancestry",
-    #"results/verifybamid/{sample_number}.selfSM",
-    "results/flags/verifybamid_ran_flag",
+    ancestry = expand("results/verifybamid/{sample_numbers}.Ancestry", sample_numbers=sample_numbers),
+    selfSM = expand("results/verifybamid/{sample_numbers}.selfSM", sample_numbers=sample_numbers),
 
   params:
     svd_prefix = "inputs/VerifyBamID_resource/1000g.phase3.100k.b38.vcf.gz.dat",
@@ -104,17 +100,17 @@ rule collect_contamination:
   4. Rename #SEQ_ID field to SAMPLE
   """
   input:
-    verifybamid_ran_flag = "results/flags/verifybamid_ran_flag",
+    selfSM = expand("results/verifybamid/{sample_numbers}.selfSM", sample_numbers=sample_numbers),
 
   output:
     all_samples_contamination = "results/verifybamid/all.selfSM",
 
   params:
-    all_samples = "results/verifybamid/*.selfSM",
+    all_samples_glob = "results/verifybamid/*.selfSM",
 
   shell:
     """
-    cat {params.all_samples} | \
+    cat {params.all_samples_glob} | \
     sed -e '1p' -e '/#SEQ_ID/d' | \
     cut -f 1,7 | \
     sed -e 's/#SEQ_ID/SAMPLE/' > \
@@ -126,14 +122,18 @@ rule generate_pc_plots:
   Generate the plots with the requested Principal Component matchups
   """
   input:
-    reference_pc = "inputs/VerifyBamID_resource/1000g.phase3.100k.b38.vcf.gz.dat.V",
-    samples_populations = "inputs/crams/1000G_reference_populations.txt",
+    ancestry = expand("results/verifybamid/{sample_numbers}.Ancestry", sample_numbers=sample_numbers),
+    reference_pc = "inputs/verifybamid_resources/1000g.phase3.100k.b38.vcf.gz.dat.V",
+    thousandG_reference_populations = "inputs/crams/1000G_reference_populations.txt",
 
   output:
     pc12_plot = "results/PC1_PC2.png",
     pc23_plot = "results/PC2_PC3.png",
     pc34_plot = "results/PC3_PC4.png",
     pc123_plot = "results/PC1_PC2_PC3.png",
+
+  params:
+    ancestry_filenames = lambda wildcards: sample_numbers,
 
   script:
     "scripts/generate_pc_plots.py"

@@ -2,3 +2,15 @@ human_genome_url: "ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/technical/refere
 human_genome_index_url: "ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa.fai"
 verify_bam_id_url: "https://github.com/Griffan/VerifyBamID.git"
 skills_test_url: "https://github.com/CERC-Genomic-Medicine/skills_test_3.git"
+
+sample_numbers:
+  - HGDP00082
+  - HGDP00450
+  - HGDP00525
+  - HGDP00563
+  - HGDP00575
+  - HGDP00669
+  - HGDP00843
+  - HGDP00859
+  - HGDP01225
+  - HGDP01310
