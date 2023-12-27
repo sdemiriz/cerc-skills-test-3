@@ -29,7 +29,10 @@ rule download_verifybamid_resources:
     resources_url = config["verifybamid2_url"],
 
   output:
-    verify_bam_id_resources = expand("inputs/verifybamid_resources/1000g.phase3.100k.b38.vcf.gz.dat.{ext}", ext=["UD", "V", "bed", "mu"]),
+    verify_bam_id_resources = expand(
+      "inputs/verifybamid_resources/1000g.phase3.100k.b38.vcf.gz.dat.{ext}", 
+      ext=["UD", "V", "bed", "mu"]
+    ),
   
   shell:
     """
@@ -49,8 +52,14 @@ rule download_crams:
     temp_dir = "skills_test",
 
   output:
-    cram_files = expand("inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram", sample_numbers=sample_numbers),
-    cram_index_files = expand("inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram.fai", sample_numbers=sample_numbers),
+    cram_files = expand(
+      "inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram", 
+      sample_numbers=sample_numbers
+    ),
+    cram_index_files = expand(
+      "inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram.fai", 
+      sample_numbers=sample_numbers
+    ),
     thousandG_reference_populations = "inputs/crams/1000G_reference_populations.txt",
 
   shell:
@@ -66,11 +75,20 @@ rule verifybamid:
   """
   input:
     reference = "inputs/genome/GRCh38.fa",
-    bam_file = expand("inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram", sample_numbers=sample_numbers),
+    bam_file = expand(
+      "inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram", 
+      sample_numbers=sample_numbers
+    ),
      
   output:
-    ancestry = expand("results/verifybamid/{sample_numbers}.Ancestry", sample_numbers=sample_numbers),
-    selfSM = expand("results/verifybamid/{sample_numbers}.selfSM", sample_numbers=sample_numbers),
+    ancestry = expand(
+      "results/verifybamid/{sample_numbers}.Ancestry", 
+      sample_numbers=sample_numbers
+    ),
+    selfSM = expand(
+      "results/verifybamid/{sample_numbers}.selfSM", 
+      sample_numbers=sample_numbers
+    ),
 
   params:
     svd_prefix = "inputs/verifybamid_resources/1000g.phase3.100k.b38.vcf.gz.dat",
@@ -96,7 +114,10 @@ rule collect_contamination:
   4. Rename #SEQ_ID field to SAMPLE
   """
   input:
-    selfSM = expand("results/verifybamid/{sample_numbers}.selfSM", sample_numbers=sample_numbers),
+    selfSM = expand(
+      "results/verifybamid/{sample_numbers}.selfSM", 
+      sample_numbers=sample_numbers
+    ),
 
   output:
     all_samples_contamination = "results/verifybamid/all.selfSM",
@@ -118,7 +139,10 @@ rule generate_pc_plots:
   Generate the plots with the requested Principal Component matchups
   """
   input:
-    ancestry = expand("results/verifybamid/{sample_numbers}.Ancestry", sample_numbers=sample_numbers),
+    ancestry = expand(
+      "results/verifybamid/{sample_numbers}.Ancestry", 
+      sample_numbers=sample_numbers
+    ),
     reference_pc = "inputs/verifybamid_resources/1000g.phase3.100k.b38.vcf.gz.dat.V",
     thousandG_reference_populations = "inputs/crams/1000G_reference_populations.txt",
 
