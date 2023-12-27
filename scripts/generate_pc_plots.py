@@ -5,7 +5,7 @@ reference_pc = pd.read_csv(snakemake.input["reference_pc"], sep="\t", header=Non
 reference_pc.columns = ["SAMPLE", "PC1", "PC2", "PC3", "PC4"]
 
 samples_populations = pd.read_csv(
-    snakemake.input["samples_populations"], sep="\t", header=None
+    snakemake.input["thousandG_reference_populations"], sep="\t", header=None
 )
 samples_populations.columns = ["SAMPLE", "POPULATION"]
 
