@@ -20,6 +20,9 @@ for anc in ancestry:
     # Extract sample name from filename and assign to a new column
     df["SAMPLE"] = re.search("HGDP[0-9]+", anc).group(0)
 
+    # Add columns to denote these samples come from the study
+    df["POPULATION"] = "STUDY"
+
     # Append new dataframe to all the existing ones
     all_ancestry = pd.concat([all_ancestry, df])
 
