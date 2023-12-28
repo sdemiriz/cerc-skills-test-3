@@ -158,3 +158,20 @@ rule generate_pc_plots:
 
   script:
     "scripts/generate_pc_plots.py"
+
+rule classify_samples:
+  """
+  """
+  input:
+    ancestry = "results/verifybamid/all.Ancestry",
+    reference_pc = "inputs/verifybamid_resources/1000g.phase3.100k.b38.vcf.gz.dat.V",
+    thousandG_reference_populations = "inputs/crams/1000G_reference_populations.txt",
+
+  output:
+    classified_samples = "results/Populations.txt",
+
+  params:
+    n_neighbors = 5,
+
+  script:
+    "scripts/classify_samples.py"
