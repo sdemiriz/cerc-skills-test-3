@@ -4,10 +4,10 @@ import pandas as pd
 reference_pc = pd.read_csv(snakemake.input["reference_pc"], sep="\t", header=None)
 reference_pc.columns = ["SAMPLE", "PC1", "PC2", "PC3", "PC4"]
 
-samples_populations = pd.read_csv(
+reference_populations = pd.read_csv(
     snakemake.input["thousandG_reference_populations"], sep="\t", header=None
 )
-samples_populations.columns = ["SAMPLE", "POPULATION"]
+reference_populations.columns = ["SAMPLE", "POPULATION"]
 
 reference_pc_populations = reference_pc.merge(samples_populations, on="SAMPLE")
 
