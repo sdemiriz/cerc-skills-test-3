@@ -156,8 +156,5 @@ rule generate_pc_plots:
     pc34_plot = "results/PC3_PC4.png",
     pc123_plot = "results/PC1_PC2_PC3.png",
 
-  params:
-    ancestry_filenames = lambda wildcards: sample_numbers,
-
   script:
     "scripts/generate_pc_plots.py"
