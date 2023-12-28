@@ -9,7 +9,8 @@ reference_populations = pd.read_csv(
 )
 reference_populations.columns = ["SAMPLE", "POPULATION"]
 
-reference_pc_populations = reference_pc.merge(samples_populations, on="SAMPLE")
+reference_pc_populations = reference_pc.merge(reference_populations, on="SAMPLE")
+study_pc_populations = pd.read_csv(snakemake.input["ancestry"], sep="\t")
 
 
 def two_axis_pc_plot(first: str, second: str, out_file: str):
