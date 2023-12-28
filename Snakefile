@@ -27,6 +27,7 @@ rule download_verifybamid_resources:
   """
   params:
     resources_url = config["verifybamid2_url"],
+    temp_dir = "VerifyBamID",
 
   output:
     verify_bam_id_resources = expand(
@@ -36,9 +37,9 @@ rule download_verifybamid_resources:
   
   shell:
     """
-    git clone {params.resources_url}
-    mv verifybamid/resources/1000g.phase3.100k.b38.vcf.gz.dat* inputs/verifybamid_resources/
-    rm -rf verifybamid
+    git clone {params.resources_url} {params.temp_dir}
+    mv {params.temp_dir}/resource/1000g.phase3.100k.b38.vcf.gz.dat* inputs/verifybamid_resources/
+    rm -rf {params.temp_dir}
     """
 
 rule download_crams:
@@ -57,7 +58,7 @@ rule download_crams:
       sample_numbers=sample_numbers
     ),
     cram_index_files = expand(
-      "inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram.fai", 
+      "inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram.crai", 
       sample_numbers=sample_numbers
     ),
     thousandG_reference_populations = "inputs/crams/1000G_reference_populations.txt",
@@ -75,25 +76,16 @@ rule verifybamid:
   """
   input:
     reference = "inputs/genome/GRCh38.fa",
-    bam_file = expand(
-      "inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram", 
-      sample_numbers=sample_numbers
-    ),
+    bam_file = "inputs/crams/{sample_numbers}.GRCh38.low_coverage.cram", 
      
   output:
-    ancestry = expand(
-      "results/verifybamid/{sample_numbers}.Ancestry", 
-      sample_numbers=sample_numbers
-    ),
-    selfSM = expand(
-      "results/verifybamid/{sample_numbers}.selfSM", 
-      sample_numbers=sample_numbers
-    ),
+    ancestry = "results/verifybamid/{sample_numbers}.Ancestry", 
+    selfSM = "results/verifybamid/{sample_numbers}.selfSM", 
 
   params:
     svd_prefix = "inputs/verifybamid_resources/1000g.phase3.100k.b38.vcf.gz.dat",
     num_pc = 4,
-    output_prefix = lambda wildcards: "results/verifybamid/{wildcards.sample_numbers}",
+    output_prefix = "results/verifybamid/{sample_numbers}",
 
   shell:
     """
