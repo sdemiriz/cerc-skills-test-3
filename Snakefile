@@ -126,6 +126,21 @@ rule collect_contamination:
     {output.all_samples_contamination}
     """
 
+rule collect_ancestry:
+  """
+  """
+  input:
+    ancestry = expand(
+      "results/verifybamid/{sample_numbers}.Ancestry", 
+      sample_numbers=sample_numbers
+    ),
+
+  output:
+    all_ancestry = "results/verifybamid/all.Ancestry",
+
+  script:
+    "scripts/collect_ancestry.py"
+
 rule generate_pc_plots:
   """
   Generate the plots with the requested Principal Component matchups
