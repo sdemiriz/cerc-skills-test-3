@@ -128,6 +128,7 @@ rule collect_contamination:
 
 rule collect_ancestry:
   """
+  Concatanate all .Ancestry files into one after transposing each due to formatting constraints
   """
   input:
     ancestry = expand(
