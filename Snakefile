@@ -146,10 +146,7 @@ rule generate_pc_plots:
   Generate the plots with the requested Principal Component matchups
   """
   input:
-    ancestry = expand(
-      "results/verifybamid/{sample_numbers}.Ancestry", 
-      sample_numbers=sample_numbers
-    ),
+    ancestry = "results/verifybamid/all.Ancestry",
     reference_pc = "inputs/verifybamid_resources/1000g.phase3.100k.b38.vcf.gz.dat.V",
     thousandG_reference_populations = "inputs/crams/1000G_reference_populations.txt",
 
