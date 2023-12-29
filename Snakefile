@@ -211,5 +211,5 @@ rule collect_deliverables:
 
   shell:
     """
-    mv {input} deliverables/
+    cp {input} deliverables/
     """
