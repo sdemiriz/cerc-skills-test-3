@@ -1,6 +1,17 @@
 configfile: "config/config.yaml"
 sample_numbers = config["sample_numbers"]
 
+rule all:
+  input:
+    [
+      "deliverables/Contamination.txt",
+      "deliverables/Populations.txt",
+      "deliverables/PC1_PC2.png",
+      "deliverables/PC2_PC3.png",
+      "deliverables/PC3_PC4.png",
+      "deliverables/PC1_PC2_PC3.png"
+    ]
+
 rule download_human_genome_and_index:
   """
   Download GRCh38 reference genome and the corresponding index
@@ -112,7 +123,7 @@ rule collect_contamination:
     ),
 
   output:
-    all_samples_contamination = "results/verifybamid/all.selfSM",
+    all_samples_contamination = "results/verifybamid/Contamination.txt",
 
   params:
     all_samples_glob = "results/verifybamid/*.selfSM",
@@ -152,16 +163,17 @@ rule generate_pc_plots:
     thousandG_reference_populations = "inputs/crams/1000G_reference_populations.txt",
 
   output:
-    pc12_plot = "results/PC1_PC2.png",
-    pc23_plot = "results/PC2_PC3.png",
-    pc34_plot = "results/PC3_PC4.png",
-    pc123_plot = "results/PC1_PC2_PC3.png",
+    pc12_plot = "results/plots/PC1_PC2.png",
+    pc23_plot = "results/plots/PC2_PC3.png",
+    pc34_plot = "results/plots/PC3_PC4.png",
+    pc123_plot = "results/plots/PC1_PC2_PC3.png",
 
   script:
     "scripts/generate_pc_plots.py"
 
 rule classify_samples:
   """
+  Use a K Nearest Neighbors classifier to classify study samples into reference populations
   """
   input:
     ancestry = "results/verifybamid/all.Ancestry",
@@ -176,3 +188,28 @@ rule classify_samples:
 
   script:
     "scripts/classify_samples.py"
+
+rule collect_deliverables:
+  """
+  Move all files to deliver to single location
+  """
+  input:
+    "results/verifybamid/Contamination.txt",
+    "results/Populations.txt",
+    "results/plots/PC1_PC2.png",
+    "results/plots/PC2_PC3.png",
+    "results/plots/PC3_PC4.png",
+    "results/plots/PC1_PC2_PC3.png",
+
+  output:
+    "deliverables/Contamination.txt",
+    "deliverables/Populations.txt",
+    "deliverables/PC1_PC2.png",
+    "deliverables/PC2_PC3.png",
+    "deliverables/PC3_PC4.png",
+    "deliverables/PC1_PC2_PC3.png",
+
+  shell:
+    """
+    mv {input} deliverables/
+    """
