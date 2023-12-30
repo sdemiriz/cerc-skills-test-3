@@ -13,16 +13,21 @@ the `conda` environment to be able to run the workflow.
 ```
 conda env create -n st3 -f envs/environment.yml
 ```
+* All necessary tools, packages etc. for running the tools as well as the `conda` channels they can be found
+in can be found in the `envs/environment.yml` file. I did not include them here because `conda` should be 
+able to automatically fetch and install everything necessary for this workflow to run.
 
-Activate the new `st3` environment by running:
+Activate the new `st3` environment by running after everything has been fetched and installed:
 ```
 conda activate st3
 ```
 
-After the installations complete, execute the workflow by running the following command while in the same directory,
-specifying the number of cores to use, N, as any number between 1-10 inclusive, due to the workflow running on at most
-10 samples at the same time. Any larger number will not significantly improve runtime and smaller numbers will work
-through the 10 samples in batches, slowing execution:
+Finally, execute the workflow by running the following command while in the same directory,
+specifying the number of cores to use, `N`, as any number between 1-10 inclusive, due to the workflow running on at most
+10 samples at the same time. 
+
+Any larger number will not significantly improve runtime and smaller numbers will work
+through the 10 samples in batches, increasing runtime:
 ```
 snakemake -cN
 ```
