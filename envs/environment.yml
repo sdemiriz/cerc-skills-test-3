@@ -14,4 +14,3 @@ dependencies:
   - certifi
   - matplotlib
   - scikit-learn
-prefix: /home/sdemiriz/.conda/envs/cerc
