@@ -24,6 +24,9 @@ rule download_human_genome_and_index:
     genome = 'inputs/genome/GRCh38.fa',
     genome_index = 'inputs/genome/GRCh38.fa.fai',
 
+  conda:
+    "envs/environment.yml"
+
   shell:
     """
     curl {params.human_genome_url} -o {output.genome}
@@ -46,6 +49,9 @@ rule download_verifybamid_resources:
       ext=["UD", "V", "bed", "mu"]
     ),
   
+  conda:
+    "envs/environment.yml"
+
   shell:
     """
     git clone {params.resources_url} {params.temp_dir}
@@ -74,6 +80,9 @@ rule download_crams:
     ),
     thousandG_reference_populations = "inputs/crams/1000G_reference_populations.txt",
 
+  conda:
+    "envs/environment.yml"
+
   shell:
     """
     git clone {params.inputs_url} {params.temp_dir}
@@ -97,6 +106,9 @@ rule verifybamid:
     svd_prefix = "inputs/verifybamid_resources/1000g.phase3.100k.b38.vcf.gz.dat",
     num_pc = 4,
     output_prefix = "results/verifybamid/{sample_numbers}",
+
+  conda:
+    "envs/environment.yml"
 
   shell:
     """
@@ -128,6 +140,9 @@ rule collect_contamination:
   params:
     all_samples_glob = "results/verifybamid/*.selfSM",
 
+  conda:
+    "envs/environment.yml"
+
   shell:
     """
     cat {params.all_samples_glob} | \
@@ -150,6 +165,9 @@ rule collect_ancestry:
   output:
     all_ancestry = "results/verifybamid/all.Ancestry",
 
+  conda:
+    "envs/environment.yml"
+
   script:
     "scripts/collect_ancestry.py"
 
@@ -168,6 +186,9 @@ rule generate_pc_plots:
     pc34_plot = "results/plots/PC3_PC4.png",
     pc123_plot = "results/plots/PC1_PC2_PC3.png",
 
+  conda:
+    "envs/environment.yml"
+
   script:
     "scripts/generate_pc_plots.py"
 
@@ -185,6 +206,9 @@ rule classify_samples:
 
   params:
     n_neighbors = 5,
+
+  conda:
+    "envs/environment.yml"
 
   script:
     "scripts/classify_samples.py"
